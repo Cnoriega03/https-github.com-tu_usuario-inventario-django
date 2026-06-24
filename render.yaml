@@ -4,13 +4,19 @@ services:
     runtime: python
     plan: free
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput
-    startCommand: gunicorn inventario_empresa.wsgi:application --log-file -
+    startCommand: python manage.py migrate && python manage.py configurar_permisos && python manage.py crear_admin_env && gunicorn inventario_empresa.wsgi:application --log-file -
     envVars:
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
         value: "False"
       - key: DATABASE_URL
+        sync: false
+      - key: DJANGO_SUPERUSER_USERNAME
+        sync: false
+      - key: DJANGO_SUPERUSER_EMAIL
+        sync: false
+      - key: DJANGO_SUPERUSER_PASSWORD
         sync: false
       - key: ALLOWED_HOSTS
         value: ".onrender.com"
