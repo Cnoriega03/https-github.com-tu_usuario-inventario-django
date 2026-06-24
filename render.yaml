@@ -1,9 +1,3 @@
-databases:
-  - name: inventario-db
-    plan: free
-    databaseName: inventario
-    user: inventario
-
 services:
   - type: web
     name: inventario-web
@@ -17,9 +11,7 @@ services:
       - key: DEBUG
         value: "False"
       - key: DATABASE_URL
-        fromDatabase:
-          name: inventario-db
-          property: connectionString
+        sync: false
       - key: ALLOWED_HOSTS
         value: ".onrender.com"
       - key: CSRF_TRUSTED_ORIGINS
