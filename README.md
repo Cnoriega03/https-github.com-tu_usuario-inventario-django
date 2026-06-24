@@ -1,4 +1,9 @@
 ﻿# Sistema Web de Inventario Django listo para produccion
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Cnoriega03/https-github.com-tu_usuario-inventario-django)
+
+Deploy directo en Render:
+
+https://render.com/deploy?repo=https://github.com/Cnoriega03/https-github.com-tu_usuario-inventario-django
 
 Aplicacion Django para gestionar inventario con autenticacion, usuarios administrados desde el panel admin, permisos por roles, PostgreSQL en produccion, WhiteNoise para archivos estaticos y Gunicorn como servidor WSGI.
 
@@ -304,3 +309,4 @@ gunicorn inventario_empresa.wsgi:application --log-file -
 - Cambia la contraseÃ±a temporal del administrador si creaste una localmente.
 - Solo usuarios con `is_staff=True` pueden entrar al panel admin.
 - Los usuarios normales deben estar en el grupo `Usuario Inventario` y tener `is_staff=False`.
+
