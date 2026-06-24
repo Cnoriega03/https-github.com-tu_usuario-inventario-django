@@ -1,0 +1,113 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Panel principal{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="h3 mb-1">Panel principal</h1>
+        <p class="text-muted mb-0">Resumen general del inventario.</p>
+    </div>
+    {% if perms.inventario.add_producto %}
+        <a class="btn btn-primary" href="{% url 'producto_crear' %}">Nuevo producto</a>
+    {% endif %}
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card metric-card">
+            <div class="card-body">
+                <span class="text-muted small">Productos</span>
+                <div class="metric-number">{{ total_productos }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card metric-card">
+            <div class="card-body">
+                <span class="text-muted small">Categorias</span>
+                <div class="metric-number">{{ total_categorias }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card metric-card">
+            <div class="card-body">
+                <span class="text-muted small">Unidades en stock</span>
+                <div class="metric-number">{{ total_stock }}</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card metric-card {% if productos_bajo_minimo %}border-warning{% endif %}">
+            <div class="card-body">
+                <span class="text-muted small">Alertas de stock minimo</span>
+                <div class="metric-number text-warning">{{ productos_bajo_minimo }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if alertas_stock %}
+    <div class="alert alert-warning">Hay productos por debajo del stock minimo.</div>
+    <div class="card mb-4">
+        <div class="card-header bg-white fw-semibold">Productos con stock bajo</div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Producto</th>
+                        <th>Categoria</th>
+                        <th class="text-end">Stock</th>
+                        <th class="text-end">Minimo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in alertas_stock %}
+                        <tr>
+                            <td class="fw-semibold">{{ producto.codigo }}</td>
+                            <td>{{ producto.nombre }}</td>
+                            <td>{{ producto.categoria.nombre }}</td>
+                            <td class="text-end">{{ producto.stock_actual }}</td>
+                            <td class="text-end">{{ producto.stock_minimo }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endif %}
+
+<div class="card">
+    <div class="card-header bg-white fw-semibold">Ultimos movimientos</div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Fecha</th>
+                    <th>Producto</th>
+                    <th>Tipo</th>
+                    <th class="text-end">Cantidad</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movimiento in ultimos_movimientos %}
+                    <tr>
+                        <td>{{ movimiento.fecha|date:"d/m/Y H:i" }}</td>
+                        <td>{{ movimiento.producto.nombre }}</td>
+                        <td>
+                            <span class="badge {% if movimiento.tipo == 'ENTRADA' %}text-bg-success{% else %}text-bg-secondary{% endif %}">
+                                {{ movimiento.get_tipo_display }}
+                            </span>
+                        </td>
+                        <td class="text-end">{{ movimiento.cantidad }}</td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4" class="text-center text-muted py-4">Aun no hay movimientos.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

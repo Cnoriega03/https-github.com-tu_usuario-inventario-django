@@ -1,0 +1,23 @@
+﻿{% extends "base.html" %}
+
+{% block title %}{{ titulo }}{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <h1 class="h3 mb-1">{{ titulo }}</h1>
+    <p class="text-muted mb-0">El stock se actualizara automaticamente al guardar.</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {% include "inventario/partials_form.html" with form=form %}
+            <div class="d-flex gap-2 mt-3">
+                <button class="btn btn-primary" type="submit">Registrar</button>
+                <a class="btn btn-outline-secondary" href="{% url 'producto_lista' %}">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
